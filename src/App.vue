@@ -10,48 +10,38 @@
           transition="scale-transition"
           width="40"
         />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+        <v-btn to="/" text>Continuity Media</v-btn>
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+      <v-btn text :outlined="lang == 'en'" @click="lang = 'en'">
+        EN
+      </v-btn>
+      <v-btn text :outlined="lang == 'sk'" @click="lang = 'sk'">
+        SK
       </v-btn>
     </v-app-bar>
 
     <v-content>
-      <HelloWorld />
+      <!-- <HelloWorld /> -->
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import Component from 'vue-class-component'
 
-export default Vue.extend({
-  name: 'App',
+@Component
+export default class App extends Vue {
+  get lang() {
+    return this.$i18n.locale
+  }
 
-  components: {
-    HelloWorld,
-  },
-
-  data: () => ({
-    //
-  }),
-})
+  set lang(lang: string) {
+    this.$i18n.locale = lang
+  }
+}
 </script>
