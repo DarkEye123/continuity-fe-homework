@@ -5,30 +5,33 @@ import {
   Action,
   getModule,
 } from 'vuex-module-decorators'
-import { MediaError } from '@/types/media'
+import { MediaError, FetchMedia } from '@/types/media'
 import { Medium } from '@/types/media'
 import store from '@/store'
 import MediaService, { MediaAPIResponseType } from '@/services/MediaService'
 import { NetworkError } from '@/services/NetworkService'
 
-export interface MediaState {
-  media: Medium[]
+interface FetchOptions {
   totalPageCount: number
   mediaPerPage: number
+  totalMediaCount: number
+}
+
+export interface MediaState {
+  media: Medium[]
+  options: FetchOptions
   medium: Medium | {}
   errors: MediaError[]
 }
 
-type FetchMedia = {
-  perPage: number
-  page: number
-}
-
 @Module({ dynamic: true, store, name: 'event' })
 class Media extends VuexModule implements MediaState {
+  options: FetchOptions = {
+    totalPageCount: 1,
+    mediaPerPage: 5,
+    totalMediaCount: 1,
+  }
   media: Medium[] = []
-  totalPageCount = 1
-  mediaPerPage = 10
   medium = {}
   errors: MediaError[] = []
 
@@ -48,11 +51,6 @@ class Media extends VuexModule implements MediaState {
   }
 
   @Mutation
-  setTotalPageCount(cnt: number) {
-    this.totalPageCount = cnt
-  }
-
-  @Mutation
   setMedia(media: Medium[]) {
     this.media = media
   }
@@ -62,13 +60,33 @@ class Media extends VuexModule implements MediaState {
     this.errors = errors
   }
 
+  @Mutation
+  setOptions(options: FetchOptions) {
+    this.options = options
+  }
+
   @Action
-  async fetchMedia({ page, perPage }: FetchMedia): Promise<Medium[]> {
-    const res = await MediaService.getMedia(page, perPage)
+  async fetchMedia({
+    page,
+    perPage,
+    sortBy,
+    orderDesc,
+  }: FetchMedia): Promise<Medium[]> {
+    const res = await MediaService.getMedia({
+      page,
+      perPage,
+      sortBy,
+      orderDesc,
+    })
     if (res.type == MediaAPIResponseType.DATA) {
       const data = res.data as Medium[]
       this.setMedia(data)
-      this.setTotalPageCount(res.totalCount!)
+      const options: FetchOptions = {
+        mediaPerPage: perPage,
+        totalMediaCount: res.totalCount!,
+        totalPageCount: Math.ceil(res.totalCount! / perPage),
+      }
+      this.setOptions(options)
       return data
     }
     if (res.type == MediaAPIResponseType.MEDIA_ERROR) {

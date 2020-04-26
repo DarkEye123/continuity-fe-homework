@@ -4,7 +4,9 @@ import camelCase from 'lodash.camelcase'
 import mapKeys from 'lodash.mapkeys'
 
 import { client, NetworkError } from './NetworkService'
-import { Medium, BaseMedium, MediaError } from '@/types/media'
+import { Medium, BaseMedium, MediaError, FetchMedia } from '@/types/media'
+
+const MAX_MEDIA_COUNT = -1
 
 const convertFromDAO = (m: MediumDAO): Medium =>
   (mapKeys(m, (v, k) => camelCase(k)) as unknown) as Medium
@@ -35,10 +37,19 @@ export interface MediaResponse {
 }
 
 export default {
-  async getMedia(page: number, perPage: number): Promise<MediaResponse> {
+  async getMedia({
+    page,
+    perPage,
+    sortBy,
+    orderDesc,
+  }: FetchMedia): Promise<MediaResponse> {
     try {
+      const pagination =
+        perPage !== MAX_MEDIA_COUNT ? `_limit=${perPage}&_page=${page}` : ''
+      const _sortBy = sortBy ? `&_sort=${sortBy}` : ''
+      const _orderBy = sortBy && orderDesc ? `&_order=desc` : ''
       const response = await client.get<MediaAPIResponse>(
-        `/media?_limit=${perPage}&_page=${page}`
+        `/media?${pagination}${_sortBy}${_orderBy}`
       )
       const data = response.data.data.map(convertFromDAO)
       const totalCount = Number(response.headers['x-total-count'])

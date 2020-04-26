@@ -32,3 +32,10 @@ export interface MediaError {
 export enum MediaErrorCode {
   MEDIA_NOT_FOUND = 'media-not-found',
 }
+
+export type FetchMedia = {
+  perPage: number
+  page: number
+  sortBy?: string
+  orderDesc?: boolean
+}
