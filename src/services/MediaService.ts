@@ -46,7 +46,7 @@ export default {
     try {
       const pagination =
         perPage !== MAX_MEDIA_COUNT ? `_limit=${perPage}&_page=${page}` : ''
-      const _sortBy = sortBy ? `&_sort=${sortBy}` : ''
+      const _sortBy = sortBy ? `&_sort=${snakeCase(sortBy)}` : ''
       const _orderBy = sortBy && orderDesc ? `&_order=desc` : ''
       const response = await client.get<MediaAPIResponse>(
         `/media?${pagination}${_sortBy}${_orderBy}`
