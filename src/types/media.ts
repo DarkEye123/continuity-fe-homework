@@ -26,7 +26,7 @@ export interface Medium extends BaseMedium {
 export interface MediaError {
   message: string
   code: MediaErrorCode
-  details?: string
+  details: string
 }
 
 export enum MediaErrorCode {

@@ -17,29 +17,45 @@ interface MediumDAO extends BaseMedium {
   release_year: number
 }
 
-interface MediaResponse {
+interface MediaAPIResponse {
   data: MediumDAO[]
   errors: MediaError[]
 }
 
+export enum MediaAPIResponseType {
+  DATA,
+  MEDIA_ERROR,
+  NETWORK_ERROR,
+}
+
+export interface MediaResponse {
+  type: MediaAPIResponseType
+  data: Medium[] | MediaError[] | NetworkError
+  totalCount?: number
+}
+
 export default {
-  async fetchMedia(
-    perPage: number,
-    page: number
-  ): Promise<Medium[] | MediaError[] | NetworkError> {
+  async getMedia(page: number, perPage: number): Promise<MediaResponse> {
     try {
-      const response = await client.get<MediaResponse>(
+      const response = await client.get<MediaAPIResponse>(
         `/media?_limit=${perPage}&_page=${page}`
       )
-      let data = response.data.data.map(convertFromDAO)
-      return data
+      const data = response.data.data.map(convertFromDAO)
+      const totalCount = Number(response.headers['x-total-count'])
+      return { data, type: MediaAPIResponseType.DATA, totalCount }
     } catch (err) {
       if (err.response?.status == HttpStatus.NOT_FOUND) {
-        return err.response.data.errors as MediaError[]
+        return {
+          data: err.response.data.errors,
+          type: MediaAPIResponseType.MEDIA_ERROR,
+        }
       }
       return {
-        message: `server error: ${err.message || err.response?.status}`,
-      } as NetworkError
+        data: {
+          message: `server error: ${err.message || err.response?.status}`,
+        },
+        type: MediaAPIResponseType.NETWORK_ERROR,
+      }
     }
   },
 }
