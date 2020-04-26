@@ -16,9 +16,29 @@ server.use((req, res, next) => {
   if (req.method === 'POST') {
     req.body.guid = uuidv4()
   }
-  // Continue to JSON Server router
   next()
 })
+
+router.render = (req, res) => {
+  if (res.statusCode == 200) {
+    res.jsonp({
+      data: res.locals.data,
+      errors: null,
+    })
+  } else {
+    const guid = req.path.split('/').pop()
+    res.jsonp({
+      data: null,
+      errors: [
+        {
+          message: 'Media record was not found.',
+          details: guid,
+          code: 'media-not-found',
+        },
+      ],
+    })
+  }
+}
 
 server.use(router)
 server.listen(3000, () => {

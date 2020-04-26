@@ -7,6 +7,94 @@
       "kind": "Game",
       "number_of_discs": 1,
       "release_year": 2020
+    },
+    {
+      "guid": "03207fa2-8ff7-47ae-b902-73a2b5589899",
+      "title": "Red Dead Redemption 2",
+      "type": "BluRay",
+      "kind": "Game",
+      "number_of_discs": 1,
+      "release_year": 2019
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589899",
+      "title": "The Witcher 3: Wild Hunt",
+      "type": "BluRay",
+      "kind": "Game",
+      "number_of_discs": 1,
+      "release_year": 2015
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589898",
+      "title": "The Gentlemen",
+      "type": "DVD",
+      "kind": "Movie",
+      "number_of_discs": 3,
+      "release_year": 2019
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589897",
+      "title": "Intouchables",
+      "type": "DVD",
+      "kind": "Movie",
+      "number_of_discs": 1,
+      "release_year": 2011
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589896",
+      "title": "Terminator 2: Judgment Day",
+      "type": "DVD",
+      "kind": "Movie",
+      "number_of_discs": 2,
+      "release_year": 1991
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589895",
+      "title": "nephrology 2",
+      "type": "CD",
+      "kind": "Software",
+      "number_of_discs": 1,
+      "release_year": 1991
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589894",
+      "title": "the kidneys",
+      "type": "CD",
+      "kind": "Music",
+      "number_of_discs": 1,
+      "release_year": 2000
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589893",
+      "title": "wistly",
+      "type": "CD",
+      "kind": "Music",
+      "number_of_discs": 1,
+      "release_year": 2003
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589892",
+      "title": "limnology",
+      "type": "CD",
+      "kind": "Software",
+      "number_of_discs": 2,
+      "release_year": 2005
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589891",
+      "title": "meow anthology",
+      "type": "CD",
+      "kind": "Music",
+      "number_of_discs": 3,
+      "release_year": 2020
+    },
+    {
+      "guid": "03207ca2-8ff7-47ae-b902-73a2b5589890",
+      "title": "Worms Reloaded",
+      "type": "DVD",
+      "kind": "Software",
+      "number_of_discs": 1,
+      "release_year": 2020
     }
   ]
 }
