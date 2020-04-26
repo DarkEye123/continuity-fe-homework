@@ -73,29 +73,7 @@ export default class Home extends Vue {
   }
 
   beforeMount() {
-    this.headers = [
-      {
-        text: this.$t('title'),
-        align: 'start',
-        value: 'title',
-      },
-      {
-        text: this.$t('type'),
-        value: 'type',
-      },
-      {
-        text: this.$t('kind'),
-        value: 'kind',
-      },
-      {
-        text: this.$t('numberOfDiscs'),
-        value: 'numberOfDiscs',
-      },
-      {
-        text: this.$t('releaseYear'),
-        value: 'releaseYear',
-      },
-    ]
+    this.onLocaleChange()
     this.options = { page: 1, itemsPerPage: MediaModule.options.mediaPerPage }
   }
 }
