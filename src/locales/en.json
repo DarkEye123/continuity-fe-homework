@@ -1,3 +1,7 @@
 {
-  "message": "hello i18n !!"
+  "title": "Title",
+  "type": "Type",
+  "kind": "Kind",
+  "numberOfDiscs": "Number Of Discs",
+  "releaseYear": "Release Year"
 }

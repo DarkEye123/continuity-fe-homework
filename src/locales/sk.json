@@ -1,3 +1,7 @@
 {
-  "message": "ahoj i18n !!"
+  "title": "Titul",
+  "type": "Typ",
+  "kind": "Druh",
+  "numberOfDiscs": "Počet Diskov",
+  "releaseYear": "Rok Vydania"
 }
