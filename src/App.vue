@@ -25,6 +25,7 @@
 
     <v-content>
       <router-view></router-view>
+      <base-network-error-presenter></base-network-error-presenter>
     </v-content>
   </v-app>
 </template>

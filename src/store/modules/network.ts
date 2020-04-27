@@ -39,7 +39,7 @@ class Network extends VuexModule implements NetworkState {
   }
 
   get rawErrors() {
-    return this.errors.find((e: NetworkError) => !e.consumed)
+    return this.errors.filter((e: NetworkError) => !e.consumed)
   }
 }
 
