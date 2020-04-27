@@ -9,6 +9,13 @@
       "release_year": 2020
     },
     {
+      "title": "THIS WILL THROW 404",
+      "number_of_discs": "1",
+      "release_year": "1",
+      "kind": "Game",
+      "type": "DVD"
+    },
+    {
       "guid": "03207fa2-8ff7-47ae-b902-73a2b5589899",
       "title": "Red Dead Redemption 2",
       "type": "BluRay",
