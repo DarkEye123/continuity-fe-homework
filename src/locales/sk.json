@@ -7,5 +7,13 @@
   "media": "Média",
   "actions": "Akcie",
   "noData": "žiadne dáta",
-  "addMedium": "pridať médium"
+  "addMedium": "pridať médium",
+  "updateMedium": "Upraviť Médium",
+  "createMedium": "Vytvoriť Médium",
+  "titleErr": "Vyberte názov média",
+  "discsErr": "Zadajte počet diskov",
+  "yearErr": "Zadajte rok vydania",
+  "typeErr": "Zadajte typ média",
+  "kindErr": "Zadajte druh média",
+  "indicates": "*indikuje potrebné pole"
 }
