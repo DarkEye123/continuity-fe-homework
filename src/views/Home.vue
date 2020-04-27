@@ -47,14 +47,18 @@
                 </template>
                 <media-form
                   v-model="dialog"
+                  :isUpdate="editRequested"
+                  :medium="mediumToEdit"
                   @save="handleSaveForm"
+                  @update="handleUpdateForm"
+                  @close="mediumToEdit = {}"
                 ></media-form>
               </v-dialog>
             </v-toolbar>
           </template>
 
           <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="edit(item)">
+            <v-icon small class="mr-2" @click="mediumToEdit = item">
               mdi-pencil
             </v-icon>
             <v-icon smal @click="deleteMedium(item)">
@@ -96,6 +100,22 @@ export default class Home extends Vue {
 
   _filter = ''
 
+  editRequested = false
+
+  _medium: Medium | {} = {}
+
+  get mediumToEdit() {
+    return this.$data._medium
+  }
+
+  set mediumToEdit(medium: Medium | {}) {
+    this.$data._medium = medium
+    this.editRequested = !!medium
+    if (medium) {
+      this.dialog = true
+    }
+  }
+
   get filters() {
     const filtered = [...this.headers]
     filtered.pop() //actions
@@ -127,6 +147,15 @@ export default class Home extends Vue {
   async handleSaveForm(medium: Medium) {
     try {
       await MediaModule.createMedium(medium)
+      this.dialog = false
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async handleUpdateForm(medium: Medium) {
+    try {
+      await MediaModule.updateMedium(medium)
       this.dialog = false
     } catch (e) {
       console.log(e)

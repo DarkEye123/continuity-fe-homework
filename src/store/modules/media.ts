@@ -127,6 +127,24 @@ class Media extends VuexModule implements MediaState {
   }
 
   @Action
+  async updateMedium(medium: Medium): Promise<Medium> {
+    this.setLoading(true)
+    const res = await MediaService.updateMedium(medium)
+    this.setLoading(false)
+    if (res.type == MediaAPIResponseType.DATA) {
+      const medium = res.data as Medium
+      this.setMedium(medium)
+      return medium
+    }
+    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
+      const data = res.data as MediaError[]
+      this.setErrors(data)
+      throw data
+    }
+    throw res.data as NetworkError
+  }
+
+  @Action
   async deleteMedium(id: string) {
     this.setLoading(true)
     const res = await MediaService.deleteMedium(id)

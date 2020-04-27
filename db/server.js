@@ -16,6 +16,9 @@ server.use((req, res, next) => {
   if (req.method === 'POST') {
     req.body.guid = uuidv4()
   }
+  if (req.method === 'PUT') {
+    req.body.guid = req.path.split('/').pop()
+  }
   next()
 })
 

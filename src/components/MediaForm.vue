@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>
         <span class="headline">{{
-          medium ? $t('updateMedium') : $t('createMedium')
+          isUpdate ? $t('updateMedium') : $t('createMedium')
         }}</span>
       </v-card-title>
       <v-card-text>
@@ -83,18 +83,26 @@ import { Vue, Component, Model, Prop, Ref, Watch } from 'vue-property-decorator'
 import { MediaKind, MediaType, Medium } from '@/types/media'
 import { MediaModule } from '../store/modules/media'
 
-@Component
-export default class Home extends Vue {
+@Component<Home>({
+  data() {
+    return {
+      innerMedium: this.medium,
+    }
+  },
+})
+class Home extends Vue {
   @Model('update:isOpen') readonly isOpen!: boolean
-  @Prop() medium!: string
+  @Prop() medium!: Medium
+  @Prop() isUpdate!: boolean
   @Ref() readonly form!: HTMLFormElement
+
+  innerMedium: Medium | {} = {}
 
   get isLoading() {
     return MediaModule.isLoading
   }
 
   formValidity = false
-  innerMedium: Medium | {} = {}
   mediaKinds = Object.values(MediaKind)
   mediaTypes = Object.values(MediaType)
   rules: Record<string, any> = {}
@@ -103,8 +111,8 @@ export default class Home extends Vue {
   onLocaleChange() {
     this.rules = {
       title: [(v: string) => !!v || this.$t('titleErr')],
-      discs: [(v: string) => !!v || this.$t('discsErr')],
-      year: [(v: string) => !!v || this.$t('yearErr')],
+      discs: [(v: number) => !!v || this.$t('discsErr')],
+      year: [(v: number) => !!v || this.$t('yearErr')],
       type: [(v: string) => !!v || this.$t('typeErr')],
       kind: [(v: string) => !!v || this.$t('kindErr')],
     }
@@ -113,16 +121,29 @@ export default class Home extends Vue {
     this.onLocaleChange()
   }
 
+  @Watch('medium')
+  onMediumPropChange() {
+    this.innerMedium = this.medium
+  }
+
   handleClose() {
+    this.innerMedium = {}
     this.form.reset()
+    this.$emit('close')
     this.$emit('update:isOpen')
   }
 
   submit() {
-    this.$emit('save', this.innerMedium)
-    this.form.reset()
+    if (!this.isUpdate) {
+      this.$emit('save', this.innerMedium)
+      this.form.reset()
+    } else {
+      this.$emit('update', this.innerMedium)
+    }
   }
 }
+
+export default Home
 </script>
 
 <style scoped></style>

@@ -93,6 +93,22 @@ export default {
     }
   },
 
+  async updateMedium(medium: Medium): Promise<MediaResponse> {
+    const putData = convertToDAO(medium)
+    const id = putData.guid
+    delete putData.guid
+    try {
+      const response = await client.put<MediaAPIResponse>(
+        `/media/${id}`,
+        putData
+      )
+      const data = convertFromDAO(response.data.data as MediumDAO)
+      return { data, type: MediaAPIResponseType.DATA }
+    } catch (err) {
+      return makeMediaError(err) || makeNetworkError(err)
+    }
+  },
+
   async deleteMedium(id: string): Promise<MediaResponse> {
     try {
       const response = await client.delete<MediaAPIResponse>(`/media/${id}`)
