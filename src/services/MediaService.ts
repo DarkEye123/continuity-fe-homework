@@ -20,7 +20,7 @@ interface MediumDAO extends BaseMedium {
 }
 
 interface MediaAPIResponse {
-  data: MediumDAO[]
+  data: MediumDAO[] | MediumDAO
   errors: MediaError[]
 }
 
@@ -32,8 +32,26 @@ export enum MediaAPIResponseType {
 
 export interface MediaResponse {
   type: MediaAPIResponseType
-  data: Medium[] | MediaError[] | NetworkError
+  data: Medium | Medium[] | MediaError[] | NetworkError
   totalCount?: number
+}
+
+function makeNetworkError(err: any): MediaResponse {
+  return {
+    data: {
+      message: `server error: ${err.message || err.response?.status}`,
+    },
+    type: MediaAPIResponseType.NETWORK_ERROR,
+  }
+}
+
+function makeMediaError(err: any) {
+  if (err.response?.status == HttpStatus.NOT_FOUND) {
+    return {
+      data: err.response.data.errors,
+      type: MediaAPIResponseType.MEDIA_ERROR,
+    }
+  }
 }
 
 export default {
@@ -56,22 +74,22 @@ export default {
       const response = await client.get<MediaAPIResponse>(
         `/media?${pagination}${_filter}${_sortBy}${_orderBy}`
       )
-      const data = response.data.data.map(convertFromDAO)
+      const data = (response.data.data as MediumDAO[]).map(convertFromDAO)
       const totalCount = Number(response.headers['x-total-count'])
       return { data, type: MediaAPIResponseType.DATA, totalCount }
     } catch (err) {
-      if (err.response?.status == HttpStatus.NOT_FOUND) {
-        return {
-          data: err.response.data.errors,
-          type: MediaAPIResponseType.MEDIA_ERROR,
-        }
-      }
-      return {
-        data: {
-          message: `server error: ${err.message || err.response?.status}`,
-        },
-        type: MediaAPIResponseType.NETWORK_ERROR,
-      }
+      return makeMediaError(err) || makeNetworkError(err)
+    }
+  },
+  async createMedium(medium: Medium): Promise<MediaResponse> {
+    const postData = convertToDAO(medium)
+    try {
+      const response = await client.post<MediaAPIResponse>('/media', postData)
+      const data = convertFromDAO(response.data.data as MediumDAO)
+      return { data, type: MediaAPIResponseType.DATA }
+    } catch (err) {
+      // simplification - I assume create will be always successful or server problem
+      return makeNetworkError(err)
     }
   },
 }

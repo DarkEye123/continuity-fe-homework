@@ -1,14 +1,14 @@
 export enum MediaType {
   CD = 'CD',
   DVD = 'DVD',
-  BluRay = 'BluRay',
+  BLURAY = 'BluRay',
 }
 
 export enum MediaKind {
-  Movie = 'Movie',
-  Music = 'Music',
-  Software = 'Software',
-  Game = 'Game',
+  MOVIE = 'Movie',
+  MUSIC = 'Music',
+  SOFTWARE = 'Software',
+  GAME = 'Game',
 }
 
 export interface BaseMedium {

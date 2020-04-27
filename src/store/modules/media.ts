@@ -107,6 +107,24 @@ class Media extends VuexModule implements MediaState {
     throw res.data as NetworkError
   }
 
+  @Action
+  async createMedium(medium: Medium): Promise<Medium> {
+    this.setLoading(true)
+    const res = await MediaService.createMedium(medium)
+    this.setLoading(false)
+    if (res.type == MediaAPIResponseType.DATA) {
+      const data = res.data as Medium
+      this.setMedium(data)
+      return data
+    }
+    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
+      const data = res.data as MediaError[]
+      this.setErrors(data)
+      throw data
+    }
+    throw res.data as NetworkError
+  }
+
   get mediumByID() {
     return function (this: Media, id: string) {
       return this.media.find((e: Medium) => e.guid == id)
