@@ -33,9 +33,15 @@ export enum MediaErrorCode {
   MEDIA_NOT_FOUND = 'media-not-found',
 }
 
+type Filter = {
+  column: string
+  text: string
+}
+
 export type FetchMedia = {
   perPage: number
   page: number
   sortBy?: string
   orderDesc?: boolean
+  filterBy?: Filter
 }

@@ -6,5 +6,6 @@
   "releaseYear": "Release Year",
   "media": "Media",
   "actions": "Actions",
-  "no-data": "no data"
+  "noData": "no data",
+  "addMedium": "add medium"
 }

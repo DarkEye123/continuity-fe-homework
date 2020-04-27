@@ -31,6 +31,7 @@ class Media extends VuexModule implements MediaState {
     mediaPerPage: 5,
     totalMediaCount: 0,
   }
+  isLoading = false
   media: Medium[] = []
   medium = {}
   errors: MediaError[] = []
@@ -65,19 +66,28 @@ class Media extends VuexModule implements MediaState {
     this.options = options
   }
 
+  @Mutation
+  setLoading(loading: boolean) {
+    this.isLoading = loading
+  }
+
   @Action
   async fetchMedia({
     page,
     perPage,
     sortBy,
     orderDesc,
+    filterBy,
   }: FetchMedia): Promise<Medium[]> {
+    this.setLoading(true)
     const res = await MediaService.getMedia({
       page,
       perPage,
       sortBy,
       orderDesc,
+      filterBy,
     })
+    this.setLoading(false)
     if (res.type == MediaAPIResponseType.DATA) {
       const data = res.data as Medium[]
       this.setMedia(data)

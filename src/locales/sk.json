@@ -6,5 +6,6 @@
   "releaseYear": "Rok Vydania",
   "media": "Média",
   "actions": "Akcie",
-  "no-data": "žiadne dáta"
+  "noData": "žiadne dáta",
+  "addMedium": "pridať médium"
 }

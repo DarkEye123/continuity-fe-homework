@@ -11,7 +11,6 @@
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
-          <!-- <v-toolbar-title text>{{ $t('media') }}</v-toolbar-title> -->
           <v-menu offset-y>
             <template v-slot:activator="{ on }">
               <v-btn text v-on="on">
@@ -28,13 +27,21 @@
               </v-list-item>
             </v-list>
           </v-menu>
+
           <v-divider class="mx-4" inset vertical></v-divider>
+
+          <base-search-field
+            v-model="search"
+            @input="handleSearch"
+          ></base-search-field>
+
           <v-spacer></v-spacer>
+
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on }">
-              <v-btn color="primary" dark class="mb-2" v-on="on"
-                >New Item</v-btn
-              >
+              <v-btn color="primary" dark class="mb-2" v-on="on">{{
+                $t('addMedium')
+              }}</v-btn>
             </template>
           </v-dialog>
         </v-toolbar>
@@ -49,7 +56,7 @@
       </template>
       <template v-slot:no-data>
         <div class="uppercase" color="primary">
-          {{ $t('no-data') }} (ノಠ益ಠ)ノ彡┻━┻
+          {{ $t('noData') }} (ノಠ益ಠ)ノ彡┻━┻
         </div>
       </template>
     </v-data-table>
@@ -62,9 +69,11 @@ import { MediaModule } from '@/store/modules/media'
 
 @Component
 export default class Home extends Vue {
-  loading = false
+  get loading() {
+    return MediaModule.isLoading
+  }
 
-  options = {}
+  options: Record<string, any> = {}
 
   dialog = false
 
@@ -75,7 +84,6 @@ export default class Home extends Vue {
   get filters() {
     const filtered = [...this.headers]
     filtered.pop() //actions
-    console.log('rendering')
     return filtered
   }
 
@@ -85,6 +93,16 @@ export default class Home extends Vue {
 
   set filterBy(val: any) {
     this.$data._filter = val
+  }
+
+  handleSearch() {
+    const filterBy = this.search
+      ? { column: this.filterBy.value, text: this.search }
+      : {}
+    this.options = {
+      ...this.options,
+      filterBy,
+    }
   }
 
   /**
@@ -115,10 +133,17 @@ export default class Home extends Vue {
 
   @Watch('options', { deep: true })
   onOptionChanged(val: any) {
-    const { page, itemsPerPage: perPage, sortBy: _sortBy, sortDesc } = val
+    const {
+      page,
+      itemsPerPage: perPage,
+      sortBy: _sortBy,
+      sortDesc,
+      filterBy,
+    } = val
     const sortBy = _sortBy[0]
     const orderDesc = !!sortDesc[0]
-    MediaModule.fetchMedia({ page, perPage, sortBy, orderDesc })
+    console.log('ehm')
+    MediaModule.fetchMedia({ page, perPage, sortBy, orderDesc, filterBy })
   }
 
   @Watch('$i18n.locale')

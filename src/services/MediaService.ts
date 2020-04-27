@@ -42,14 +42,19 @@ export default {
     perPage,
     sortBy,
     orderDesc,
+    filterBy,
   }: FetchMedia): Promise<MediaResponse> {
     try {
       const pagination =
         perPage !== MAX_MEDIA_COUNT ? `_limit=${perPage}&_page=${page}` : ''
       const _sortBy = sortBy ? `&_sort=${snakeCase(sortBy)}` : ''
       const _orderBy = sortBy && orderDesc ? `&_order=desc` : ''
+      const _filter = filterBy?.text
+        ? `&${snakeCase(filterBy.column)}_like=${filterBy.text}`
+        : ''
+
       const response = await client.get<MediaAPIResponse>(
-        `/media?${pagination}${_sortBy}${_orderBy}`
+        `/media?${pagination}${_filter}${_sortBy}${_orderBy}`
       )
       const data = response.data.data.map(convertFromDAO)
       const totalCount = Number(response.headers['x-total-count'])
