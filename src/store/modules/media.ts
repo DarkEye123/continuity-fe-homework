@@ -29,7 +29,7 @@ class Media extends VuexModule implements MediaState {
   options: FetchOptions = {
     totalPageCount: 1,
     mediaPerPage: 5,
-    totalMediaCount: 1,
+    totalMediaCount: 0,
   }
   media: Medium[] = []
   medium = {}

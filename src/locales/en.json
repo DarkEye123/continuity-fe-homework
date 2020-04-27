@@ -3,5 +3,8 @@
   "type": "Type",
   "kind": "Kind",
   "numberOfDiscs": "Number Of Discs",
-  "releaseYear": "Release Year"
+  "releaseYear": "Release Year",
+  "media": "Media",
+  "actions": "Actions",
+  "no-data": "no data"
 }

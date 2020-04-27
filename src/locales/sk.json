@@ -3,5 +3,8 @@
   "type": "Typ",
   "kind": "Druh",
   "numberOfDiscs": "Počet Diskov",
-  "releaseYear": "Rok Vydania"
+  "releaseYear": "Rok Vydania",
+  "media": "Média",
+  "actions": "Akcie",
+  "no-data": "žiadne dáta"
 }
