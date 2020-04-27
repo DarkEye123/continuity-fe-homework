@@ -71,6 +71,13 @@
             </div>
           </template>
         </v-data-table>
+        <media-error
+          v-for="error in errors"
+          :id="String(error.details)"
+          :message="error.message"
+          :key="String(error.details)"
+          v-on:errorRemove="handleErrorRemove"
+        ></media-error>
       </v-col>
     </v-row>
   </v-container>
@@ -81,10 +88,12 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { MediaModule } from '@/store/modules/media'
 import MediaForm from '@/components/MediaForm.vue'
 import { Medium } from '../types/media'
+import MediaError from '@/components/MediaError.vue'
 
 @Component({
   components: {
     MediaForm,
+    MediaError,
   },
 })
 export default class Home extends Vue {
@@ -95,6 +104,10 @@ export default class Home extends Vue {
   options: Record<string, any> = {}
 
   dialog = false
+
+  get errors() {
+    return MediaModule.errors
+  }
 
   search = ''
 
@@ -144,22 +157,18 @@ export default class Home extends Vue {
     }
   }
 
+  handleErrorRemove(id: string) {
+    MediaModule.removeError(id)
+  }
+
   async handleSaveForm(medium: Medium) {
-    try {
-      await MediaModule.createMedium(medium)
-      this.dialog = false
-    } catch (e) {
-      console.log(e)
-    }
+    const state = await MediaModule.createMedium(medium)
+    this.dialog = false
   }
 
   async handleUpdateForm(medium: Medium) {
-    try {
-      await MediaModule.updateMedium(medium)
-      this.dialog = false
-    } catch (e) {
-      console.log(e)
-    }
+    await MediaModule.updateMedium(medium)
+    this.dialog = false
   }
 
   /**

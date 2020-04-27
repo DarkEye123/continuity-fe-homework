@@ -51,6 +51,11 @@ class Media extends VuexModule implements MediaState {
   }
 
   @Mutation
+  removeError(id: string) {
+    this.errors = this.errors.filter((m) => m.details != id)
+  }
+
+  @Mutation
   setMedium(medium: Medium | {}) {
     this.medium = medium
   }
