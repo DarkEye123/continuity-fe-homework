@@ -208,7 +208,6 @@ export default class Home extends Vue {
     } = val
     const sortBy = _sortBy[0]
     const orderDesc = !!sortDesc[0]
-    console.log('ehm')
     MediaModule.fetchMedia({ page, perPage, sortBy, orderDesc, filterBy })
   }
 
