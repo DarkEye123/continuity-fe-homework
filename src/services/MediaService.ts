@@ -32,23 +32,30 @@ export enum MediaAPIResponseType {
 
 export interface MediaResponse {
   type: MediaAPIResponseType
-  data: Medium | Medium[] | MediaError[] | NetworkError
+  data: Medium | Medium[] | null
+  errors: MediaError[] | NetworkError[] | null
   totalCount?: number
 }
 
 function makeNetworkError(err: any): MediaResponse {
   return {
-    data: {
-      message: `server error: ${err.message || err.response?.status}`,
-    },
+    data: null,
+    errors: [
+      {
+        message: `server error: ${err.message || err.response?.status}`,
+        consumed: false,
+        id: Date.now(),
+      },
+    ],
     type: MediaAPIResponseType.NETWORK_ERROR,
   }
 }
 
-function makeMediaError(err: any) {
+function makeMediaError(err: any): MediaResponse | undefined {
   if (err.response?.status == HttpStatus.NOT_FOUND) {
     return {
-      data: err.response.data.errors,
+      data: null,
+      errors: err.response.data.errors,
       type: MediaAPIResponseType.MEDIA_ERROR,
     }
   }
@@ -76,7 +83,7 @@ export default {
       )
       const data = (response.data.data as MediumDAO[]).map(convertFromDAO)
       const totalCount = Number(response.headers['x-total-count'])
-      return { data, type: MediaAPIResponseType.DATA, totalCount }
+      return { data, type: MediaAPIResponseType.DATA, totalCount, errors: null }
     } catch (err) {
       return makeMediaError(err) || makeNetworkError(err)
     }
@@ -86,7 +93,7 @@ export default {
     try {
       const response = await client.post<MediaAPIResponse>('/media', postData)
       const data = convertFromDAO(response.data.data as MediumDAO)
-      return { data, type: MediaAPIResponseType.DATA }
+      return { data, type: MediaAPIResponseType.DATA, errors: null }
     } catch (err) {
       // simplification - I assume create will be always successful or server problem
       return makeNetworkError(err)
@@ -103,7 +110,7 @@ export default {
         putData
       )
       const data = convertFromDAO(response.data.data as MediumDAO)
-      return { data, type: MediaAPIResponseType.DATA }
+      return { data, type: MediaAPIResponseType.DATA, errors: null }
     } catch (err) {
       return makeMediaError(err) || makeNetworkError(err)
     }
@@ -113,7 +120,7 @@ export default {
     try {
       const response = await client.delete<MediaAPIResponse>(`/media/${id}`)
       const data = convertFromDAO(response.data.data as MediumDAO)
-      return { data, type: MediaAPIResponseType.DATA }
+      return { data, type: MediaAPIResponseType.DATA, errors: null }
     } catch (err) {
       return makeMediaError(err) || makeNetworkError(err)
     }

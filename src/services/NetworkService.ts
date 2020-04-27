@@ -2,6 +2,8 @@ import axios from 'axios'
 
 export interface NetworkError {
   message: string
+  id: number
+  consumed: boolean
 }
 
 export const client = axios.create({

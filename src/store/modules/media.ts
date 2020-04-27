@@ -8,8 +8,12 @@ import {
 import { MediaError, FetchMedia } from '@/types/media'
 import { Medium } from '@/types/media'
 import store from '@/store'
-import MediaService, { MediaAPIResponseType } from '@/services/MediaService'
+import MediaService, {
+  MediaAPIResponseType,
+  MediaResponse,
+} from '@/services/MediaService'
 import { NetworkError } from '@/services/NetworkService'
+import { NetworkModule } from '@/store/modules/network'
 
 interface FetchOptions {
   totalPageCount: number
@@ -24,7 +28,7 @@ export interface MediaState {
   errors: MediaError[]
 }
 
-@Module({ dynamic: true, store, name: 'event' })
+@Module({ dynamic: true, store, name: 'media' })
 class Media extends VuexModule implements MediaState {
   options: FetchOptions = {
     totalPageCount: 1,
@@ -72,6 +76,17 @@ class Media extends VuexModule implements MediaState {
   }
 
   @Action
+  handleErrors(res: MediaResponse, medium?: Medium) {
+    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
+      const data = res.errors as MediaError[]
+      this.setErrors(data)
+    } else {
+      NetworkModule.appendErrors(res.errors as NetworkError[])
+    }
+    return medium
+  }
+
+  @Action
   async fetchMedia({
     page,
     perPage,
@@ -99,12 +114,8 @@ class Media extends VuexModule implements MediaState {
       this.setOptions(options)
       return data
     }
-    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
-      const data = res.data as MediaError[]
-      this.setErrors(data)
-      throw data
-    }
-    throw res.data as NetworkError
+    this.handleErrors(res)
+    return []
   }
 
   @Action
@@ -118,12 +129,7 @@ class Media extends VuexModule implements MediaState {
       this.addMedium(medium) // TODO optimize with sort
       return medium
     }
-    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
-      const data = res.data as MediaError[]
-      this.setErrors(data)
-      throw data
-    }
-    throw res.data as NetworkError
+    return this.handleErrors(res, medium) as Medium
   }
 
   @Action
@@ -136,12 +142,7 @@ class Media extends VuexModule implements MediaState {
       this.setMedium(medium)
       return medium
     }
-    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
-      const data = res.data as MediaError[]
-      this.setErrors(data)
-      throw data
-    }
-    throw res.data as NetworkError
+    return this.handleErrors(res, medium) as Medium
   }
 
   @Action
@@ -154,12 +155,7 @@ class Media extends VuexModule implements MediaState {
       this.removeMedium(id)
       return
     }
-    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
-      const data = res.data as MediaError[]
-      this.setErrors(data)
-      throw data
-    }
-    throw res.data as NetworkError
+    this.handleErrors(res)
   }
 
   get mediumByID() {
