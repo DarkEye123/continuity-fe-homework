@@ -11,6 +11,20 @@ Vuetify, Axios, Typescript with a lot of decorators.
 I planned to use [http://rollbar.com](rollbar) for error tracking, but I did not have time for the setup at the end.
 Cypress and Jest were included, but not used :( ...
 
+## Functionality
+
+DB server is customized to match requirements from the homework description.
+Whole implementation is using BE-driven pagination, sorting and filtration.
+
+## Possible improvements, opinions with experience sharing
+
+This was my first play with Vuetify and Typescript in Vue.
+I'm Vue newbie so I fought with some basic stuff.
+
+In real world I'd use some sort of route guard mechanisms. Also, I'd make most of the calls to Vuex in route parts.
+
+Reasoning is simple - that way components would be less dependable and better testable.
+
 ## What about errors?
 
 Simple error 404 will show when manipulating with medium with title: "THIS WILL THROW 404"
