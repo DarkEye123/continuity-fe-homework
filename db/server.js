@@ -1,7 +1,7 @@
 const jsonServer = require('json-server')
 const { v4: uuidv4 } = require('uuid')
 const server = jsonServer.create()
-const router = jsonServer.router('db.json')
+const router = jsonServer.router('./db.json')
 const middlewares = jsonServer.defaults()
 
 const redirects = require('./json-server-routes.json')
