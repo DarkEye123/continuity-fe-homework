@@ -14,6 +14,7 @@ Cypress and Jest were included, but not used :( ...
 ## What about errors?
 
 Simple error 404 will show when manipulating with medium with title: "THIS WILL THROW 404"
+
 Network error can be simulated via chrome network tab (or just shutdown the db server manually)
 
 ## Warnings ??
