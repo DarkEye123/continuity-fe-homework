@@ -92,4 +92,14 @@ export default {
       return makeNetworkError(err)
     }
   },
+
+  async deleteMedium(id: string): Promise<MediaResponse> {
+    try {
+      const response = await client.delete<MediaAPIResponse>(`/media/${id}`)
+      const data = convertFromDAO(response.data.data as MediumDAO)
+      return { data, type: MediaAPIResponseType.DATA }
+    } catch (err) {
+      return makeMediaError(err) || makeNetworkError(err)
+    }
+  },
 }

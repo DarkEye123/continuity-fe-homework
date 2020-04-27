@@ -57,7 +57,7 @@
             <v-icon small class="mr-2" @click="edit(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small>
+            <v-icon smal @click="deleteMedium(item)">
               mdi-delete
             </v-icon>
           </template>
@@ -108,6 +108,10 @@ export default class Home extends Vue {
 
   set filterBy(val: any) {
     this.$data._filter = val
+  }
+
+  async deleteMedium(medium: Medium) {
+    await MediaModule.deleteMedium(medium.guid)
   }
 
   handleSearch() {

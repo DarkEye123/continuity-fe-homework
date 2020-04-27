@@ -33,7 +33,7 @@ class Media extends VuexModule implements MediaState {
   }
   isLoading = false
   media: Medium[] = []
-  medium = {}
+  medium: Medium | {} = {}
   errors: MediaError[] = []
 
   @Mutation
@@ -42,12 +42,12 @@ class Media extends VuexModule implements MediaState {
   }
 
   @Mutation
-  removeMedium(medium: Medium) {
-    this.media = this.media.filter((m) => m.guid != medium.guid)
+  removeMedium(id: string) {
+    this.media = this.media.filter((m) => m.guid != id)
   }
 
   @Mutation
-  setMedium(medium: Medium) {
+  setMedium(medium: Medium | {}) {
     this.medium = medium
   }
 
@@ -113,9 +113,28 @@ class Media extends VuexModule implements MediaState {
     const res = await MediaService.createMedium(medium)
     this.setLoading(false)
     if (res.type == MediaAPIResponseType.DATA) {
-      const data = res.data as Medium
-      this.setMedium(data)
-      return data
+      const medium = res.data as Medium
+      this.setMedium(medium)
+      this.addMedium(medium) // TODO optimize with sort
+      return medium
+    }
+    if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
+      const data = res.data as MediaError[]
+      this.setErrors(data)
+      throw data
+    }
+    throw res.data as NetworkError
+  }
+
+  @Action
+  async deleteMedium(id: string) {
+    this.setLoading(true)
+    const res = await MediaService.deleteMedium(id)
+    this.setLoading(false)
+    if (res.type == MediaAPIResponseType.DATA) {
+      this.setMedium({})
+      this.removeMedium(id)
+      return
     }
     if (res.type == MediaAPIResponseType.MEDIA_ERROR) {
       const data = res.data as MediaError[]
