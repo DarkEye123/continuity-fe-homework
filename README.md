@@ -7,7 +7,7 @@ Vue usually [http://localhost:8080/](http://localhost:8080/)
 
 ## Used stack
 
-Vuetify, Axios, Typescript with a lot of decorators.
+Vuetify, Axios, vue-i18n, Typescript with a lot of decorators.
 I planned to use [http://rollbar.com](rollbar) for error tracking, but I did not have time for the setup at the end.
 Cypress and Jest were included, but not used :( ...
 
@@ -15,6 +15,7 @@ Cypress and Jest were included, but not used :( ...
 
 DB server is customized to match requirements from the homework description.
 Whole implementation is using BE-driven pagination, sorting and filtration.
+Simple translations to SK are included too :)
 
 ## Possible improvements, opinions with experience sharing
 
