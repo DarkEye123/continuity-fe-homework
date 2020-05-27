@@ -19,9 +19,6 @@ Simple translations to SK are included too :)
 
 ## Possible improvements, opinions with experience sharing
 
-This was my first play with Vuetify and Typescript in Vue.
-I'm Vue newbie so I fought with some basic stuff.
-
 In real world I'd use some sort of route guard mechanisms. Also, I'd make most of the calls to Vuex in route parts.
 
 Reasoning is simple - that way components would be less dependable and better testable.
