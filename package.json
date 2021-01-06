@@ -16,7 +16,7 @@
     "@types/lodash.camelcase": "^4.3.6",
     "@types/lodash.mapkeys": "^4.6.6",
     "@types/lodash.snakecase": "^4.1.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "http-status-codes": "^1.4.0",
     "lodash.camelcase": "^4.3.0",
